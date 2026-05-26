@@ -11,6 +11,23 @@ function json(statusCode, body) {
   return { statusCode, headers, body: JSON.stringify(body) };
 }
 
+function getLeaderboardStore() {
+  const siteID = process.env.NETLIFY_BLOBS_SITE_ID || process.env.NETLIFY_SITE_ID;
+  const token = process.env.NETLIFY_BLOBS_TOKEN || process.env.NETLIFY_AUTH_TOKEN;
+
+  const options = {
+    name: 'project-s-leaderboard',
+    consistency: 'strong'
+  };
+
+  if (siteID && token) {
+    options.siteID = siteID;
+    options.token = token;
+  }
+
+  return getStore(options);
+}
+
 function sanitizeDisplayName(value, metaUserId) {
   const raw = String(value || '').trim();
   const cleaned = raw
@@ -63,7 +80,7 @@ exports.handler = async function(event) {
   const now = new Date().toISOString();
 
   try {
-    const store = getStore('project-s-leaderboard');
+    const store = getLeaderboardStore();
     const key = 'player:' + metaUserId;
     const existing = await store.get(key, { type: 'json' });
 
@@ -97,6 +114,6 @@ exports.handler = async function(event) {
     });
   } catch (error) {
     console.error(error);
-    return json(500, { ok: false, error: 'Could not save score' });
+    return json(500, { ok: false, error: 'Could not save score', detail: error.message, name: error.name });
   }
 };

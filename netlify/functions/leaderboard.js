@@ -12,6 +12,23 @@ function json(statusCode, body) {
   return { statusCode, headers, body: JSON.stringify(body) };
 }
 
+function getLeaderboardStore() {
+  const siteID = process.env.NETLIFY_BLOBS_SITE_ID || process.env.NETLIFY_SITE_ID;
+  const token = process.env.NETLIFY_BLOBS_TOKEN || process.env.NETLIFY_AUTH_TOKEN;
+
+  const options = {
+    name: 'project-s-leaderboard',
+    consistency: 'strong'
+  };
+
+  if (siteID && token) {
+    options.siteID = siteID;
+    options.token = token;
+  }
+
+  return getStore(options);
+}
+
 function safeNumber(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
@@ -30,7 +47,7 @@ exports.handler = async function(event) {
   const limit = Math.max(1, Math.min(100, Number.isFinite(limitParam) ? Math.floor(limitParam) : 100));
 
   try {
-    const store = getStore('project-s-leaderboard');
+    const store = getLeaderboardStore();
     const listed = await store.list({ prefix: 'player:' });
     const blobs = Array.isArray(listed.blobs) ? listed.blobs : [];
 
@@ -74,6 +91,6 @@ exports.handler = async function(event) {
     });
   } catch (error) {
     console.error(error);
-    return json(500, { ok: false, error: 'Could not load leaderboard' });
+    return json(500, { ok: false, error: 'Could not load leaderboard', detail: error.message, name: error.name });
   }
 };
