@@ -1,0 +1,41 @@
+Unity / Meta Quest / Project S - cumulative Robots Destroyed scoring
+
+Goal:
+Send each completed mission's robots destroyed delta to the ProjectSVR.net leaderboard.
+
+Website API endpoint:
+POST https://projectsvr.net/.netlify/functions/submit-score
+
+JSON payload:
+{
+  "metaUserId": "<Meta user id>",
+  "displayName": "<Meta display name>",
+  "robotsDestroyedDelta": <int>,
+  "gameVersion": "0.01",
+  "platform": "quest"
+}
+
+Requirements:
+1. Track robotsDestroyedThisRun during each mission.
+2. Increment robotsDestroyedThisRun only when an enemy robot/unit/vehicle is actually destroyed.
+3. Send score only once when a mission ends: victory, defeat, or quit-to-menu after gameplay started.
+4. Send only the delta from that mission, not the cumulative total.
+5. Retrieve Meta User ID and Display Name using Meta Platform SDK on Quest.
+6. If Meta Platform SDK is unavailable in Editor, use test fallback values:
+   metaUserId = "editor_test_user"
+   displayName = "TestCommander"
+7. If Meta display name is empty, use fallback: Commander_<last 4 digits of metaUserId>.
+8. Clamp robotsDestroyedDelta to a reasonable maximum per mission before submitting.
+9. If the request fails, store the pending score locally and retry later.
+10. Do not block gameplay or scene transitions if submission fails.
+11. Log success/failure only in Development Build or Editor.
+12. Do not send email or personal data.
+13. Do not submit every kill. Submit once per completed run.
+
+Suggested Unity scripts:
+- ProjectSScoreTracker.cs: counts robotsDestroyedThisRun and exposes AddRobotDestroyed().
+- ProjectSMetaUserService.cs: initializes Meta Platform SDK and gets user ID/display name, with Editor fallback.
+- ProjectSLeaderboardClient.cs: POSTs JSON to the Netlify Function, queues failed submissions, retries later.
+
+Important:
+The Netlify server adds the delta to the player's cumulative total. Unity must never send the player's total as robotsDestroyedDelta.

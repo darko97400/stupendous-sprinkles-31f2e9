@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project S — VR Tabletop RTS for Meta Quest</title>
+  <meta name="description" content="Project S is a funny VR tabletop RTS for Meta Quest, where tiny robot armies battle across your living room table." />
+  <meta property="og:title" content="Project S — VR Tabletop RTS for Meta Quest" />
+  <meta property="og:description" content="Command tiny robot armies, capture factories, deploy vehicles, unlock tons of units, and create big tabletop chaos in VR." />
+  <meta property="og:image" content="assets/hero-bg.png?v=85" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="preload" as="image" href="assets/hero-bg.png?v=85" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/logo.png" fetchpriority="high" />
+  <link rel="stylesheet" href="styles-v8-5.css?v=85" />
+</head>
+<body id="top">
+  <div class="depth-backdrop" aria-hidden="true"></div>
+  <div class="depth-glow depth-glow-left" aria-hidden="true"></div>
+  <div class="depth-glow depth-glow-right" aria-hidden="true"></div>
+  <div class="parallax-particles layer-far" aria-hidden="true"></div>
+  <div class="parallax-particles layer-mid" aria-hidden="true"></div>
+  <div class="parallax-particles layer-near" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top" aria-label="Project S home">
+        <img src="assets/logo.png" alt="Project S logo" class="brand-logo" width="48" height="48" decoding="async" fetchpriority="high" />
+        <div class="brand-copy">
+          <span class="brand-title">Project S</span>
+          <span class="brand-subtitle">VR Tabletop RTS</span>
+        </div>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="main-nav" class="main-nav">
+        <a href="#about">About</a>
+        <a href="#trailer">Trailer</a>
+        <a href="#features">Features</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#merch">Merch</a>
+        <a href="#scoring">Scoring</a>
+        <a href="https://www.instagram.com/projectsrts" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://discord.com/invite/WQM9WJhAg" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-media">
+        <img src="assets/hero-bg.png?v=85" alt="Project S battlefield art with blue and red robots" width="1672" height="941" decoding="async" fetchpriority="high" />
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="container hero-content">
+        <div class="hero-card reveal">
+          <p class="eyebrow">Coming Soon on Meta Quest</p>
+          <h1 class="hero-title">
+            <span>Big Robot Wars</span>
+            <span>Tiny Tabletop</span>
+            <span>Pure VR Chaos</span>
+          </h1>
+          <p class="hero-text">
+            Project S is a funny VR tabletop RTS where tiny robot armies battle across your living room table.
+            Capture factories, deploy jeeps and tanks, unlock loads of units and vehicles, and push toward explosive victories.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#merch">Game & Merch</a>
+            <a class="button button-secondary" href="#trailer">Watch Trailer</a>
+          </div>
+          <ul class="hero-points">
+            <li>VR game coming soon</li>
+            <li>Free updates & free DLC</li>
+            <li>Multiplayer in development</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section section-grid container">
+      <div class="section-copy reveal">
+        <p class="section-kicker">About the game</p>
+        <h2>Command Bouba, Big Bob,<br />and a growing army across<br />Rustoria and beyond.</h2>
+        <p>
+          Jump into VR and command your miniature army from above like a tabletop general. Fight across compact battlefields,
+          capture buildings, unleash vehicles, and explore the world of Rustoria with Bouba and Big Bob — with other planets planned too.
+        </p>
+        <div class="stat-grid">
+          <article>
+            <strong>Unlock progression</strong>
+            <span>Unlock plenty of units and vehicles as you keep playing.</span>
+          </article>
+          <article>
+            <strong>Track your war</strong>
+            <span>Know your Robots Scrapped score across the whole game or during the current match.</span>
+          </article>
+          <article>
+            <strong>Free support</strong>
+            <span>Free updates and free DLC are planned to expand the experience over time.</span>
+          </article>
+          <article>
+            <strong>Future multiplayer</strong>
+            <span>Multiplayer is in development for even more tabletop chaos.</span>
+          </article>
+        </div>
+      </div>
+      <div class="section-media reveal">
+        <img src="assets/gameplay-vr.png" alt="Player in VR commanding Project S tabletop units" class="rounded-image" width="1672" height="941" loading="lazy" decoding="async" />
+      </div>
+    </section>
+
+    <section id="trailer" class="section container">
+      <div class="section-head reveal">
+        <p class="section-kicker">Trailer</p>
+        <h2>See Project S in motion.</h2>
+        <p>Concept video showing the direction, tone, and gameplay vision for Project S.</p>
+      </div>
+      <div class="trailer-shell reveal">
+        <div class="video-wrap youtube-direct">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/HPIkUr10lnA?rel=0&modestbranding=1&playsinline=1"
+            title="Project S trailer"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
+        <div class="trailer-copy">
+          <h3>Why people should care</h3>
+          <ul class="bullet-list compact">
+            <li><span></span>Fast VR tabletop strategy with readable, punchy battles</li>
+            <li><span></span>Blue-vs-red robots, vehicles, drops, explosions, and comic energy</li>
+            <li><span></span>Progression, score tracking, free updates, and content ahead</li>
+          </ul>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section container">
+      <div class="section-head reveal">
+        <p class="section-kicker">Features</p>
+        <h2>Fast, readable strategy<br />with a bold sci-fi look.</h2>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <div class="feature-icon">⚔️</div>
+          <h3>Capture & Control</h3>
+          <p>Take over buildings, lock down the map, and build momentum toward victory.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-icon">🤖</div>
+          <h3>Robot Squads</h3>
+          <p>Command funny robot units with distinct personality, scale, and battlefield roles.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-icon">🚙</div>
+          <h3>Vehicles & Drops</h3>
+          <p>Deploy jeeps, tanks, and surprise reinforcements to swing the fight your way.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-icon">📈</div>
+          <h3>Progress & Stats</h3>
+          <p>Unlock more content and keep an eye on Robots Scrapped in-game and across your full campaign.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-grid section-reverse container">
+      <div class="section-media reveal">
+        <img src="assets/robots-box.png" alt="Project S robots Bouba and Big Bob opening a box" class="rounded-image" width="1448" height="1086" loading="lazy" decoding="async" />
+      </div>
+      <div class="section-copy reveal">
+        <p class="section-kicker">The world of Project S</p>
+        <h2>Bouba, Big Bob, Rustoria, and more places to conquer.</h2>
+        <p>
+          Project S mixes epic sci-fi presentation with a playful personality. The world is full of chunky robots,
+          glowing eyes, heavy metal armor, and fun cinematic moments that give the game a memorable identity.
+        </p>
+        <ul class="bullet-list">
+          <li><span></span>Readable silhouettes and strong blue-vs-red faction contrast</li>
+          <li><span></span>Rustoria is only the beginning — more planets can expand the universe</li>
+          <li><span></span>Perfect for trailers, social posts, merch, and key art</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="gallery" class="section container">
+      <div class="section-head reveal">
+        <p class="section-kicker">Gallery</p>
+        <h2>Key art and moments from the world of Project S.</h2>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+
+    </section>
+
+    <section id="merch" class="section container">
+  <div class="section-head reveal">
+    <p class="section-kicker">Merchandising</p>
+    <h2>Bring Project S<br />into the real world.</h2>
+  </div>
+  <div class="merch-grid">
+
+    <a class="product-card product-link reveal" href="https://project-s.printify.me/product/28434569" target="_blank" rel="noopener noreferrer" aria-label="Buy Project S Mug on Printify">
+      <div class="product-image-swap" aria-label="Project S mug preview">
+        <img class="product-image product-image-main" src="assets/merch-mug-lifestyle.png" alt="Robot holding Project S mug" />
+        <img class="product-image product-image-hover" src="assets/merch-mug.png" alt="Project S mug product mockup" />
+      </div>
+      <div class="product-body">
+        <h3>Mug</h3>
+        <p>Glossy black mug with Project S artwork.</p>
+        <div class="product-footer">
+          <strong>Available now</strong>
+          <span class="button">Buy Mug</span>
+        </div>
+      </div>
+    </a>
+    <a class="product-card product-link reveal" href="https://project-s.printify.me/product/28434580" target="_blank" rel="noopener noreferrer" aria-label="Buy Project S Cap on Printify">
+      <div class="product-image-swap" aria-label="Project S cap preview">
+        <img class="product-image product-image-main" src="assets/merch-cap-lifestyle.png" alt="Robot wearing Project S cap" />
+        <img class="product-image product-image-hover" src="assets/merch-cap.png" alt="Project S cap product mockup" />
+      </div>
+      <div class="product-body">
+        <h3>Cap</h3>
+        <p>Black Cap with embroidered</p>
+        <div class="product-footer">
+          <strong>Available now</strong>
+          <span class="button">Buy Cap</span>
+        </div>
+      </div>
+    </a>
+    <a class="product-card product-link reveal" href="https://project-s.printify.me/product/28434579" target="_blank" rel="noopener noreferrer" aria-label="Buy Project S T-Shirt on Printify">
+      <div class="product-image-swap" aria-label="Project S shirt preview">
+        <img class="product-image product-image-main" src="assets/merch-shirt-lifestyle.png" alt="Robot wearing Project S shirt" />
+        <img class="product-image product-image-hover" src="assets/merch-shirt.png" alt="Project S shirt product mockup" />
+      </div>
+      <div class="product-body">
+        <h3>Shirt</h3>
+        <p>Black shirt with a bold Project S</p>
+        <div class="product-footer">
+          <strong>Available now</strong>
+          <span class="button">Buy T-Shirt</span>
+        </div>
+      </div>
+    </a>
+    <a class="product-card product-link reveal" href="https://project-s.printify.me/product/28435529" target="_blank" rel="noopener noreferrer" aria-label="Buy Project S Backpack on Printify">
+      <div class="product-image-swap" aria-label="Project S backpack preview">
+        <img class="product-image product-image-main" src="assets/merch-backpack-lifestyle.png" alt="Robot wearing a Project S backpack" />
+        <img class="product-image product-image-hover" src="assets/merch-backpack.png" alt="Project S backpack product mockup" />
+      </div>
+      <div class="product-body">
+        <h3>Backpack</h3>
+        <p>Black backpack with Project S front logo.</p>
+        <div class="product-footer">
+          <strong>Available now</strong>
+          <span class="button">Buy Backpack</span>
+        </div>
+      </div>
+    </a>
+    <a class="product-card product-link reveal" href="https://project-s.printify.me/product/28435415" target="_blank" rel="noopener noreferrer" aria-label="Buy Project S Hoodie on Printify">
+      <div class="product-image-swap" aria-label="Project S hoodie preview">
+        <img class="product-image product-image-main" src="assets/merch-hoodie-lifestyle.png" alt="Robot wearing a Project S hoodie" />
+        <img class="product-image product-image-hover" src="assets/merch-hoodie.png" alt="Project S hoodie product mockup" />
+      </div>
+      <div class="product-body">
+        <h3>Hoodie</h3>
+        <p>Black hoodie with Project S front print.</p>
+        <div class="product-footer">
+          <strong>Available now</strong>
+          <span class="button">Buy Hoodie</span>
+        </div>
+      </div>
+    </a>
+    <a class="product-card product-link reveal" href="https://project-s.printify.me/product/28435568" target="_blank" rel="noopener noreferrer" aria-label="Buy Project S Mouse Pad on Printify">
+      <div class="product-image-swap" aria-label="Project S mouse pad preview">
+        <img class="product-image product-image-main" src="assets/merch-mousepad-lifestyle.png" alt="Robot using a Project S mouse pad" />
+        <img class="product-image product-image-hover" src="assets/merch-mousepad.png" alt="Project S mouse pad product mockup" />
+      </div>
+      <div class="product-body">
+        <h3>Mouse Pad</h3>
+        <p>Project S mouse pad for your battle station.</p>
+        <div class="product-footer">
+          <strong>Available now</strong>
+          <span class="button">Buy Mouse Pad</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+    <section id="store" class="section container">
+      <div class="cta-panel reveal">
+        <div class="cta-copy">
+          <p class="section-kicker">Game & store</p>
+          <h2>Project S VR Game</h2>
+        </div>
+        <div class="cta-actions wide">
+          <button class="button button-disabled" type="button" disabled>Coming Soon</button>
+          <a class="button button-secondary" href="#trailer">Watch Trailer</a>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section id="scoring" class="section container scoring-section">
+      <div class="section-head reveal">
+        <p class="section-kicker">Global War Effort</p>
+        <h2>Robots Destroyed Global</h2>
+        <p>Every mission adds to the community war effort. The Top 100 Commanders are ranked by cumulative robots destroyed.</p>
+      </div>
+
+      <div class="scoring-panel reveal">
+        <div class="scoring-hero">
+          <div>
+            <span class="score-label">Community robots destroyed</span>
+            <strong id="globalRobotsDestroyed">Loading...</strong>
+          </div>
+          <button class="button button-secondary" type="button" id="refreshLeaderboard">Refresh</button>
+        </div>
+
+        <div class="leaderboard-status" id="leaderboardStatus" role="status" aria-live="polite">Loading Top 100 Commanders...</div>
+
+        <div class="leaderboard-scroll" aria-label="Project S Top 100 Commanders leaderboard">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Commander</th>
+                <th>Robots Destroyed</th>
+                <th>Runs</th>
+                <th>Best Run</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+              <tr><td colspan="5">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section container">
+      <div class="contact-panel contact-panel-form reveal">
+        <div class="contact-copy">
+          <p class="section-kicker">Contact</p>
+          <h2>Business, press, merch,<br />or collaboration.</h2>
+        </div>
+
+        <form class="contact-form" id="contactForm" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contact" />
+
+          <p class="hidden-field">
+            <label>Do not fill this out: <input name="bot-field" /></label>
+          </p>
+
+          <label>
+            Your name
+            <input type="text" id="contactName" name="name" placeholder="Your name" required />
+          </label>
+
+          <label>
+            Your email
+            <input type="email" id="contactEmail" name="email" placeholder="you@example.com" required />
+          </label>
+
+          <label>
+            Topic
+            <select id="contactTopic" name="topic" required>
+              <option value="General">General question</option>
+              <option value="Press">Press / creator</option>
+              <option value="Merch">Merch order</option>
+              <option value="Business">Business / partnership</option>
+              <option value="Support">Support</option>
+            </select>
+          </label>
+          <input type="hidden" id="contactSubject" name="subject" value="Project S Website - General" />
+
+          <label>
+            Message
+            <textarea id="contactMessage" name="message" rows="6" placeholder="Write your message here..." required></textarea>
+          </label>
+
+          <button class="button button-primary" type="submit">Send message</button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+
+  <div class="footer-robot-overlay" aria-hidden="true">
+    <img src="assets/fixed-bottom-robots-cropped.png" alt="" />
+  </div>
+
+  <footer class="site-footer">
+<div class="container footer-wrap">
+      <div>
+        <p class="footer-title">Project S</p>
+        <p class="footer-text">Solo indie VR tabletop RTS project.</p>
+      </div>
+      <div class="footer-links">
+        <a class="footer-privacy button button-secondary" href="privacy-policy.html">Privacy Policy</a>
+        <a class="footer-privacy button button-secondary" href="https://www.instagram.com/projectsrts" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a class="footer-privacy button button-secondary" href="https://discord.com/invite/WQM9WJhAg" target="_blank" rel="noopener noreferrer">Discord</a>
+        <p class="footer-meta">© <span id="year"></span> Project S</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <figure class="lightbox-figure">
+      <img id="lightbox-image" src="" alt="" />
+      <figcaption id="lightbox-caption"></figcaption>
+    </figure>
+  </div>
+<script src="gallery-config.js"></script>
+  <script src="particles-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
