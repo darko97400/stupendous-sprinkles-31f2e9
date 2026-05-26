@@ -567,8 +567,14 @@ if (year) year.textContent = new Date().getFullYear();
 /* Project S leaderboard */
 const leaderboardBody = document.getElementById('leaderboardBody');
 const leaderboardStatus = document.getElementById('leaderboardStatus');
+const leaderboardPeriodLabel = document.getElementById('leaderboardPeriodLabel');
+const leaderboardScoreHeader = document.getElementById('leaderboardScoreHeader');
 const globalRobotsDestroyed = document.getElementById('globalRobotsDestroyed');
+const monthlyRobotsDestroyed = document.getElementById('monthlyRobotsDestroyed');
 const refreshLeaderboard = document.getElementById('refreshLeaderboard');
+const leaderboardTabs = document.querySelectorAll('.leaderboard-tab');
+
+let activeLeaderboardPeriod = 'all';
 
 function formatNumber(value) {
   return new Intl.NumberFormat('en-US').format(Number(value || 0));
@@ -580,18 +586,39 @@ function escapeText(value) {
   return div.innerHTML;
 }
 
-async function loadProjectSLeaderboard() {
+function updateLeaderboardTabs() {
+  leaderboardTabs.forEach((tab) => {
+    const isActive = tab.dataset.period === activeLeaderboardPeriod;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+}
+
+async function loadProjectSLeaderboard(period = activeLeaderboardPeriod) {
   if (!leaderboardBody || !globalRobotsDestroyed) return;
+
+  activeLeaderboardPeriod = period === 'month' ? 'month' : 'all';
+  updateLeaderboardTabs();
+
+  const isMonth = activeLeaderboardPeriod === 'month';
 
   if (leaderboardStatus) {
     leaderboardStatus.className = 'leaderboard-status';
-    leaderboardStatus.textContent = 'Loading Top 100 Commanders...';
+    leaderboardStatus.textContent = isMonth ? 'Loading monthly Top 100 Commanders...' : 'Loading all-time Top 100 Commanders...';
+  }
+
+  if (leaderboardPeriodLabel) {
+    leaderboardPeriodLabel.textContent = isMonth ? 'Showing this month ranking.' : 'Showing all-time ranking.';
+  }
+
+  if (leaderboardScoreHeader) {
+    leaderboardScoreHeader.textContent = isMonth ? 'Robots This Month' : 'Robots Destroyed';
   }
 
   leaderboardBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
 
   try {
-    const response = await fetch('/.netlify/functions/leaderboard?limit=100', {
+    const response = await fetch('/.netlify/functions/leaderboard?period=' + encodeURIComponent(activeLeaderboardPeriod) + '&limit=100', {
       headers: { 'Accept': 'application/json' }
     });
 
@@ -600,25 +627,44 @@ async function loadProjectSLeaderboard() {
     }
 
     const data = await response.json();
-    const players = Array.isArray(data.topPlayers) ? data.topPlayers : [];
 
+    if (!data.ok) {
+      throw new Error(data.error || 'Leaderboard returned an error');
+    }
+
+    const players = Array.isArray(data.topPlayers) ? data.topPlayers : [];
     globalRobotsDestroyed.textContent = formatNumber(data.totalRobotsDestroyed || 0);
+    if (monthlyRobotsDestroyed) {
+      monthlyRobotsDestroyed.textContent = formatNumber(data.totalRobotsDestroyedMonth || 0);
+    }
+
+    if (leaderboardPeriodLabel) {
+      leaderboardPeriodLabel.textContent = isMonth
+        ? 'Showing monthly ranking for ' + (data.monthKey || 'this month') + '.'
+        : 'Showing all-time ranking. Lifetime score never resets.';
+    }
 
     if (!players.length) {
-      leaderboardBody.innerHTML = '<tr><td colspan="5">No commanders yet. Be the first to destroy robots.</td></tr>';
-      if (leaderboardStatus) leaderboardStatus.textContent = 'Waiting for the first submitted score.';
+      leaderboardBody.innerHTML = '<tr><td colspan="5">No commanders yet for this period.</td></tr>';
+      if (leaderboardStatus) {
+        leaderboardStatus.textContent = isMonth ? 'Waiting for the first score this month.' : 'Waiting for the first submitted score.';
+      }
       return;
     }
 
     leaderboardBody.innerHTML = players.map((player, index) => {
       const rank = index + 1;
+      const scoreValue = isMonth ? player.robotsDestroyedMonth : player.robotsDestroyedTotal;
+      const runsValue = isMonth ? player.runsCountMonth : player.runsCount;
+      const bestRunValue = isMonth ? player.bestRunMonth : player.bestRun;
+
       return `
         <tr>
           <td class="leaderboard-rank">#${rank}</td>
           <td class="leaderboard-name">${escapeText(player.displayName)}</td>
-          <td class="leaderboard-number">${formatNumber(player.robotsDestroyedTotal)}</td>
-          <td class="leaderboard-number">${formatNumber(player.runsCount)}</td>
-          <td class="leaderboard-number">${formatNumber(player.bestRun)}</td>
+          <td class="leaderboard-number">${formatNumber(scoreValue)}</td>
+          <td class="leaderboard-number">${formatNumber(runsValue)}</td>
+          <td class="leaderboard-number">${formatNumber(bestRunValue)}</td>
         </tr>
       `;
     }).join('');
@@ -629,16 +675,23 @@ async function loadProjectSLeaderboard() {
   } catch (error) {
     console.error(error);
     globalRobotsDestroyed.textContent = '--';
+    if (monthlyRobotsDestroyed) monthlyRobotsDestroyed.textContent = '--';
     leaderboardBody.innerHTML = '<tr><td colspan="5">Leaderboard temporarily unavailable.</td></tr>';
     if (leaderboardStatus) {
       leaderboardStatus.className = 'leaderboard-status error';
-      leaderboardStatus.textContent = 'Could not load scoring yet. Deploy the Netlify Functions first.';
+      leaderboardStatus.textContent = 'Could not load scoring. Check Netlify Functions.';
     }
   }
 }
 
+leaderboardTabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    loadProjectSLeaderboard(tab.dataset.period);
+  });
+});
+
 if (refreshLeaderboard) {
-  refreshLeaderboard.addEventListener('click', loadProjectSLeaderboard);
+  refreshLeaderboard.addEventListener('click', () => loadProjectSLeaderboard(activeLeaderboardPeriod));
 }
 
-loadProjectSLeaderboard();
+loadProjectSLeaderboard('all');

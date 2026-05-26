@@ -3459,6 +3459,65 @@ img {
   text-shadow: 0 0 28px rgba(127, 243, 255, 0.48);
 }
 
+
+#monthlyRobotsDestroyed {
+  display: block;
+  font-size: clamp(1.9rem, 5vw, 4rem);
+  line-height: 0.95;
+  color: #ffe28a;
+  text-shadow: 0 0 24px rgba(255, 226, 138, 0.34);
+}
+
+.score-total-card {
+  min-width: min(100%, 340px);
+}
+
+.score-total-card-secondary {
+  padding-left: clamp(0px, 2vw, 20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.leaderboard-tabs {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  margin: 0 0 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.leaderboard-tab {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  color: rgba(240, 250, 255, 0.78);
+  background: transparent;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.leaderboard-tab:hover {
+  transform: translateY(-1px);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-tab.active {
+  color: #07101f;
+  background: linear-gradient(135deg, #7ff3ff, #ffe28a);
+  box-shadow: 0 12px 32px rgba(127, 243, 255, 0.18);
+}
+
+.leaderboard-period-label {
+  color: rgba(255, 226, 138, 0.82);
+  font-weight: 800;
+  margin: -4px 0 12px;
+}
+
+
 .leaderboard-status {
   color: rgba(218, 243, 255, 0.78);
   margin: 0 0 12px;
@@ -3526,6 +3585,19 @@ img {
 @media (max-width: 760px) {
   .scoring-hero {
     align-items: flex-start;
+  }
+
+  .score-total-card-secondary {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .leaderboard-tabs {
+    width: 100%;
+  }
+
+  .leaderboard-tab {
+    flex: 1;
   }
 
   .leaderboard-scroll {

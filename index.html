@@ -310,20 +310,30 @@
     <section id="scoring" class="section container scoring-section">
       <div class="section-head reveal">
         <p class="section-kicker">Global War Effort</p>
-        <h2>Robots Destroyed Global</h2>
-        <p>Every mission adds to the community war effort. The Top 100 Commanders are ranked by cumulative robots destroyed.</p>
+        <h2>Robots Destroyed</h2>
+        <p>Every mission adds to the Project S war effort. Lifetime never resets. Monthly resets automatically so new commanders can fight for the top spots.</p>
       </div>
 
       <div class="scoring-panel reveal">
         <div class="scoring-hero">
-          <div>
-            <span class="score-label">Community robots destroyed</span>
+          <div class="score-total-card">
+            <span class="score-label">All-time robots destroyed</span>
             <strong id="globalRobotsDestroyed">Loading...</strong>
+          </div>
+          <div class="score-total-card score-total-card-secondary">
+            <span class="score-label">This month</span>
+            <strong id="monthlyRobotsDestroyed">Loading...</strong>
           </div>
           <button class="button button-secondary" type="button" id="refreshLeaderboard">Refresh</button>
         </div>
 
+        <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard period">
+          <button class="leaderboard-tab active" type="button" id="leaderboardAllTime" data-period="all">All Time</button>
+          <button class="leaderboard-tab" type="button" id="leaderboardThisMonth" data-period="month">This Month</button>
+        </div>
+
         <div class="leaderboard-status" id="leaderboardStatus" role="status" aria-live="polite">Loading Top 100 Commanders...</div>
+        <div class="leaderboard-period-label" id="leaderboardPeriodLabel">Showing all-time ranking.</div>
 
         <div class="leaderboard-scroll" aria-label="Project S Top 100 Commanders leaderboard">
           <table class="leaderboard-table">
@@ -331,7 +341,7 @@
               <tr>
                 <th>Rank</th>
                 <th>Commander</th>
-                <th>Robots Destroyed</th>
+                <th id="leaderboardScoreHeader">Robots Destroyed</th>
                 <th>Runs</th>
                 <th>Best Run</th>
               </tr>
