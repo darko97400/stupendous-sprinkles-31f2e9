@@ -48,6 +48,10 @@ function clampInt(value, min, max) {
   return Math.max(min, Math.min(max, number));
 }
 
+function currentMonthKey() {
+  return new Date().toISOString().slice(0, 7);
+}
+
 exports.handler = async function(event) {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers, body: '' };
@@ -78,6 +82,7 @@ exports.handler = async function(event) {
   const gameVersion = String(payload.gameVersion || '').slice(0, 24);
   const platform = String(payload.platform || 'quest').slice(0, 24);
   const now = new Date().toISOString();
+  const monthKey = currentMonthKey();
 
   try {
     const store = getLeaderboardStore();
@@ -90,13 +95,27 @@ exports.handler = async function(event) {
       robotsDestroyedTotal: 0,
       runsCount: 0,
       bestRun: 0,
+      monthKey,
+      robotsDestroyedMonth: 0,
+      runsCountMonth: 0,
+      bestRunMonth: 0,
       createdAt: now
     };
 
+    if (entry.monthKey !== monthKey) {
+      entry.monthKey = monthKey;
+      entry.robotsDestroyedMonth = 0;
+      entry.runsCountMonth = 0;
+      entry.bestRunMonth = 0;
+    }
+
     entry.displayName = displayName;
     entry.robotsDestroyedTotal = clampInt(entry.robotsDestroyedTotal, 0, Number.MAX_SAFE_INTEGER) + robotsDestroyedDelta;
+    entry.robotsDestroyedMonth = clampInt(entry.robotsDestroyedMonth, 0, Number.MAX_SAFE_INTEGER) + robotsDestroyedDelta;
     entry.runsCount = clampInt(entry.runsCount, 0, Number.MAX_SAFE_INTEGER) + 1;
+    entry.runsCountMonth = clampInt(entry.runsCountMonth, 0, Number.MAX_SAFE_INTEGER) + 1;
     entry.bestRun = Math.max(clampInt(entry.bestRun, 0, Number.MAX_SAFE_INTEGER), robotsDestroyedDelta);
+    entry.bestRunMonth = Math.max(clampInt(entry.bestRunMonth, 0, Number.MAX_SAFE_INTEGER), robotsDestroyedDelta);
     entry.lastGameVersion = gameVersion;
     entry.platform = platform;
     entry.updatedAt = now;
@@ -105,15 +124,24 @@ exports.handler = async function(event) {
 
     return json(200, {
       ok: true,
+      monthKey,
       player: {
         displayName: entry.displayName,
         robotsDestroyedTotal: entry.robotsDestroyedTotal,
+        robotsDestroyedMonth: entry.robotsDestroyedMonth,
         runsCount: entry.runsCount,
-        bestRun: entry.bestRun
+        runsCountMonth: entry.runsCountMonth,
+        bestRun: entry.bestRun,
+        bestRunMonth: entry.bestRunMonth
       }
     });
   } catch (error) {
     console.error(error);
-    return json(500, { ok: false, error: 'Could not save score', detail: error.message, name: error.name });
+    return json(500, {
+      ok: false,
+      error: 'Could not save score',
+      detail: error.message,
+      name: error.name
+    });
   }
 };
