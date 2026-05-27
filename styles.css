@@ -3220,3 +3220,25 @@ body {
   background: none !important;
   opacity: 0 !important;
 }
+
+/* Meta Store Wishlist CTA */
+.store-wishlist-panel {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 154, 51, 0.28);
+  box-shadow: 0 24px 80px rgba(255, 111, 30, 0.16);
+}
+
+.store-wishlist-panel::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  background: radial-gradient(circle at 18% 12%, rgba(255, 154, 51, 0.18), transparent 34%),
+              radial-gradient(circle at 88% 78%, rgba(55, 168, 255, 0.13), transparent 36%);
+}
+
+.store-wishlist-panel > * {
+  position: relative;
+  z-index: 1;
+}
