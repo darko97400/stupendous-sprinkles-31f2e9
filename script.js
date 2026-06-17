@@ -641,7 +641,7 @@ async function loadProjectSLeaderboard(period = activeLeaderboardPeriod) {
     if (leaderboardPeriodLabel) {
       leaderboardPeriodLabel.textContent = isMonth
         ? 'Showing monthly ranking for ' + (data.monthKey || 'this month') + '.'
-        : 'Showing all-time ranking. Lifetime score never resets.';
+        : 'Showing all-time ranking since launch.';
     }
 
     if (!players.length) {
