@@ -1001,19 +1001,20 @@ function answerAll900(choice){
   let p=loadAll900Progress();
   if(p.answers[p.index]!==undefined)return;
   const q=DATA.questions[p.order[p.index]];
+  const keepScrollY=window.scrollY;
   p.answers[p.index]=choice;
   if(choice===q.a)p.correct++; else p.wrong++;
   saveAll900Progress(p);
-  renderAll900();
+  renderAll900({restoreScrollY:keepScrollY});
 }
 function nextAll900(){
   let p=loadAll900Progress();
   if(p.answers[p.index]===undefined)return;
   p.index++;
   saveAll900Progress(p);
-  renderAll900();
+  renderAll900({focusQuestion:true});
 }
-function renderAll900(){
+function renderAll900(options={}){
   const p=loadAll900Progress();
   if(!p.started){startAll900(true);return;}
   const total=p.order.length;
@@ -1040,7 +1041,7 @@ function renderAll900(){
         <button class="btn red" onclick="resetAll900()">${lang==="fr"?"Recommencer à zéro":"Restart from zero"}</button>
       </div>
     </div>
-    <div class="card">
+    <div class="card" id="all900-question-card">
       <span class="badge">${q.topic}</span>
       <div class="question">${q.q[lang]}</div>
       <div class="answer-list">
@@ -1063,7 +1064,17 @@ function renderAll900(){
           <button class="btn next-btn ready" onclick="nextAll900()">${p.index===total-1?(lang==="fr"?"Voir le résultat final":"See final result"):(lang==="fr"?"Question suivante →":"Next question →")}</button>
         </div>`:""}
     </div>`;
-  window.scrollTo({top:0,behavior:"smooth"});
+
+  if(options.restoreScrollY!==undefined){
+    requestAnimationFrame(()=>window.scrollTo({top:options.restoreScrollY,left:0,behavior:"auto"}));
+  }else if(options.focusQuestion){
+    requestAnimationFrame(()=>{
+      const card=document.getElementById("all900-question-card");
+      if(card) card.scrollIntoView({block:"start",behavior:"smooth"});
+    });
+  }else{
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
 }
 function renderAll900Complete(p){
   const total=p.order.length;
