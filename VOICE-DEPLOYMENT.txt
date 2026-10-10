@@ -1,0 +1,112 @@
+PROJECT S â€” PERSONALIZED VOICES â€” PREVIEW DEPLOYED; PRODUCTION DISABLED
+
+Repository baseline: main 4159a7f487ee15832d2420a880ea94eb3cf571a5.
+No changes to leaderboard, submit-score or reset-leaderboard.
+Windows clone reports the existing README.txt/readme.txt case collision. Do not
+include that unrelated checkout difference in a commit.
+
+FUNCTION
+POST /.netlify/functions/personalized-voice
+Body: userId, fresh Meta nonce, name, language (fr/en), kind (win/lose/training),
+revision (ps-voice-20261010-v3-mp3). No free text, model, voice or callback URL.
+Response: bounded mono MP3, 44100 Hz / 96 kbps, <=20.1 seconds including encoder padding; private/no-store.
+400 invalid input; 401 proof invalid; 409 reserved/failed generation;
+429 quota; 503 disabled/unavailable. Unity always has an immediate generic fallback.
+There is no GET endpoint exposing personalized files.
+
+PRIVATE CONFIGURATION
+PS_VOICE_ENV=production, production deploy context ONLY.
+PS_VOICE_ENABLED=true in production; previews have no activation/secrets.
+PS_VOICE_META_APP_SECRET: existing Meta app 35020187484294368 secret.
+PS_VOICE_ELEVENLABS_KEY: supplied TTS key, saved as a secret. A provider-side
+TTS-only restriction/hard cap is recommended; not claimed configured. Server
+reservation limits apply independently.
+PS_VOICE_HASH_SECRET: stable random >=32 bytes, server only; do not rotate on each
+deployment because it names the private cache. Rotation invalidates that cache.
+Netlify Database is provisioned. @netlify/database supplies the correct branch
+connection string; optional PS_VOICE_DATABASE_URL overrides it with a dedicated
+PostgreSQL connection string. TLS certificate verification is enforced. Never use an APK/client credential or leaderboard token
+as player authentication. Functions scope if available; on Personal, all scopes
+are the available default, but still production context only and marked secret.
+Do not place secrets in netlify.toml, .env committed to Git, logs, or build output.
+Netlify automatically applies netlify/database/migrations/202610100001_personalized_voices.sql
+before publishing a deploy. These tables are separate from the leaderboard Blobs.
+Provisioning/usage consumes Netlify credits; do not claim this is free.
+
+STORAGE / COST LIMITS
+Postgres: short serialized transaction reserves job and budget before a paid call.
+Cache bytes: separate private Netlify Blobs store project-s-personalized-voices-v1.
+Limits: 6 generations/user/day, 12/user/month, 5000 prompt characters globally/day,
+20000/month, 10000 total jobs. Both languages fit in the per-user daily allowance.
+Function declares an edge rate limit of 30 requests/IP/domain/minute. Its deployed
+enforcement must be checked in a preview; it is not a substitute for SQL quotas.
+Failed/uncertain paid calls retain reservations and are not automatically retried.
+A timeout/crash between saving a blob and marking it ready needs operator review;
+it returns generic audio rather than risk another charge.
+Ledger conservatively counts prompt characters, not a promise of exact provider
+billing. A dedicated ElevenLabs hard cap would provide additional protection.
+Successful cache entries are reused; new name/language/profile revision can require
+new audio. No cache expiration triggers generation on every launch.
+
+BUILD
+npm ci on Linux installs the Linux ffmpeg-static binary. The function's specific
+Netlify config bundles it and pg. Runtime requires Node 22 (current build setting).
+Avoid assuming build-only CONTEXT exists in a Lambda: PS_VOICE_ENV is explicit.
+The build copies only HTML/CSS/JS, _redirects and assets into site-dist. Function
+code, tests and secrets stay outside this public directory. Netlify separately
+packages functions and applies migrations. Verify the isolated preview first.
+Production voice secrets are isolated from previews. PR #1 has a Netlify preview.
+Do not enable paid generation in previews. Confirm the production deploy status
+before claiming that the endpoint is live.
+
+LOCAL TESTS
+node --test tests/voice.test.cjs
+Uses embedded PostgreSQL (PGlite), no remote database/provider. It serializes
+connections; real distributed lock contention still requires staging tests.
+Actual FFmpeg processing is exercised, including output limits.
+node tests/bounded-live.cjs: explicit local paid smoke test only, fictional Alex,
+exclusive pending markers; max 800 existing credits, no retries or purchase.
+Six clips generated successfully, planned total 286 characters. Artifacts stay in
+ignored test-output, not the Unity build. Do not rerun after deleting markers/files.
+
+REMAINING END-TO-END VALIDATION
+Meta app secret has been saved as a production-only Netlify secret. Database
+provisioned; PS_VOICE_ENV=production and PS_VOICE_ENABLED=true in production only.
+Provider key and stable hash secret are now saved as production-only Netlify secrets.
+The supplied real API key authenticated successfully and generated six new FR/EN
+MP3 samples (286 prompt characters, existing credits, no automatic retries).
+Production activation is tracked separately from credential configuration.
+Still requiring device validation: real Quest nonce, replay rejection,
+two independent instances competing for the same key, quota exhaustion, Linux
+FFmpeg packaging/cold start, and both Quest accounts playing separate outcomes.
+Provider key restrictions/cap remain an operational follow-up; application quotas
+are enforced before each paid call. No unlimited retries or credit purchases.
+
+UNITY AUTOMATIC PREPARATION
+The owner requested automatic personalization and restoration of Settings. No consent
+modal or added settings button remains. Preparation uses verified local Meta identity;
+existing audio mute/volume and immediate generic fallback still apply. Nicknames are
+transmitted to Netlify and ElevenLabs when generation is enabled.
+
+MP3 VALIDATION UPDATE
+Runtime and local/server caches now use MP3 exclusively. Revision v2 distinguishes
+the new format; WAV v1 was never activated in production. Existing six samples were
+transcoded locally, without new paid synthesis, and decoded using AudioType.MPEG.
+Cache keys contain no match, level or mode identifier. Tests reinitialize the handler
+five times against persistent storage and require identical bytes with one synthesis.
+A supplied ElevenLabs Key ID was tested read-only and rejected with
+api_key_id_used_as_api_key; it is not usable as PS_VOICE_ELEVENLABS_KEY.
+
+LOUDNESS MATCH (v3)
+Measured all 24 original win/lose MP3 files and five Training completion variants.
+Existing results span -21.01 to -17.03 LUFS. Their median is about -18.7 LUFS.
+Result normalization now targets -18 LUFS (previous personalized target -17),
+true peak ceiling -2 dBTP; Training retains -18 LUFS / -2.5 dBTP.
+Six actual newly generated v3 MP3s measure -19.44 to -18.35 LUFS, true peaks
+-5.19 to -2.29 dBTP. These are sample measurements, not a guarantee for all names.
+No original clips, global mixer volumes or gameplay files were changed for this.
+Unity uses the existing dialogue gain and mute paths for generic/personalized clips;
+Training retains its existing 0.8 multiplier. Final perceived balance needs Quest listening.
+The stable revision and cache keys do not include match/level/session identifiers.
+No new generation on each match. Name/language/profile changes may create new clips.
+The previous unactivated v2 preview is superseded by v3 before production launch.
