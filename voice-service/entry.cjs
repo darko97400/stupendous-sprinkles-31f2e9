@@ -1,6 +1,8 @@
 const {createHandler}=require('./handler.cjs');
 const {VoiceStore}=require('./store.cjs');
 const {synthesize,limitedBody}=require('./audio.cjs');
+const {Pool}=require('pg');
+const {getStore}=require('@netlify/blobs');
 let handler, diagnosticLogged=false;
 exports.handler=async event=>{
   const env=process.env;
@@ -10,7 +12,6 @@ exports.handler=async event=>{
     return {statusCode:503,headers:{'Cache-Control':'no-store'},body:''};
   let stage='dependencies';
   try { if(!handler) {
-    const {Pool}=require('pg'); const {getStore}=require('@netlify/blobs');
     stage='database-configuration';
     const connection=new URL(env.PS_VOICE_DATABASE_URL || (await import('@netlify/database')).getConnectionString());
     if(!['postgres:','postgresql:'].includes(connection.protocol))throw new Error('configuration');

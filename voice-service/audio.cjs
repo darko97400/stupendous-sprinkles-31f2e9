@@ -4,6 +4,7 @@ const fs=require('node:fs/promises');
 const os=require('node:os');
 const path=require('node:path');
 const run=promisify(execFile);
+const defaultFfmpeg=require('ffmpeg-static');
 const MAX_BYTES=250000;
 async function limitedBody(response, max=MAX_BYTES) {
   if (!response.ok) throw new Error('upstream');
@@ -24,7 +25,7 @@ function validMp3(data) {
   const seconds=frames*1152/44100;
   return at===data.length&&seconds>=.1&&seconds<=20.1;
 }
-async function processAudio(input, kind, ffmpeg=require('ffmpeg-static')) {
+async function processAudio(input, kind, ffmpeg=defaultFfmpeg) {
   const dir=await fs.mkdtemp(path.join(os.tmpdir(),'ps-voice-'));
   try {
     const source=path.join(dir,'source.mp3'), target=path.join(dir,'voice.mp3');

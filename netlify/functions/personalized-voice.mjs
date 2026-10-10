@@ -1,4 +1,9 @@
 import service from '../../voice-service/entry.cjs';
+// Netlify's v2 dependency tracer does not follow the CJS service's SDK requires.
+// Explicit ESM dependency edges keep these runtime packages in the deployed ZIP.
+import 'pg';
+import '@netlify/blobs';
+import 'ffmpeg-static';
 
 // Modern Functions API is required for Netlify's rateLimit configuration.
 export const config={path:'/.netlify/functions/personalized-voice',rateLimit:{windowLimit:30,windowSize:60,aggregateBy:['ip','domain']}};
