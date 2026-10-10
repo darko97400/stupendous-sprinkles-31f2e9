@@ -1,8 +1,8 @@
 const {job,keys}=require('./catalog.cjs');
-const {validWav}=require('./audio.cjs');
+const {validMp3}=require('./audio.cjs');
 const headers={'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'};
 function reply(statusCode) { return {statusCode,headers,body:''}; }
-function audio(data) {return {statusCode:200,headers:{...headers,'Content-Type':'audio/wav'},isBase64Encoded:true,body:data.toString('base64')};}
+function audio(data) {return {statusCode:200,headers:{...headers,'Content-Type':'audio/mpeg'},isBase64Encoded:true,body:data.toString('base64')};}
 function createHandler({enabled,authenticate,store,synthesize,hashSecret}) {
   return async event => {
     if(event.httpMethod!=='POST')return reply(405);
@@ -15,11 +15,11 @@ function createHandler({enabled,authenticate,store,synthesize,hashSecret}) {
       if(!await authenticate(j.userId,j.nonce))return reply(401);
       const ids=keys(hashSecret,j);key=ids.key;
       const status=await store.reserve(key,ids.owner,j.prompt.length);
-      if(status==='ready') { const data=await store.get(key); return validWav(data)?audio(data):reply(503); }
+      if(status==='ready') { const data=await store.get(key); return validMp3(data)?audio(data):reply(503); }
       if(status==='quota')return reply(429);
       if(status!=='new')return reply(409);
       reserved=true;
-      const data=await synthesize(j);if(!validWav(data))throw new Error('audio');
+      const data=await synthesize(j);if(!validMp3(data))throw new Error('audio');
       await store.save(key,data);return audio(data);
     } catch {
       if(reserved)await store.fail(key).catch(()=>{});

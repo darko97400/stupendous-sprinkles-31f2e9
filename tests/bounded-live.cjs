@@ -2,12 +2,12 @@
 // Uses the fictional name Alex. Maximum 800 existing credits; no auto-retry.
 const fs=require('node:fs/promises');
 const {job,REVISION}=require('../voice-service/catalog.cjs');
-const {synthesize,validWav}=require('../voice-service/audio.cjs');
+const {synthesize,validMp3}=require('../voice-service/audio.cjs');
 (async()=>{
  const key=process.env.ELEVENLABS_API_KEY;if(!key)throw new Error('Missing local key');
  await fs.mkdir('test-output',{recursive:true});
  const plan=[];for(const language of ['fr','en'])for(const kind of ['win','lose','training']){
-  const target=`test-output/${kind}-${language}.wav`;
+  const target=`test-output/${kind}-${language}.mp3`;
   try{await fs.access(target);continue;}catch{}
   plan.push({target,job:job({userId:'123456789',name:'Alex',nonce:'test-only-not-used',language,kind,revision:REVISION})});
  }
@@ -19,7 +19,7 @@ const {synthesize,validWav}=require('../voice-service/audio.cjs');
  for(const p of plan){
   // Exclusive marker survives any uncertain request or charge.
   await fs.writeFile(p.target+'.pending','generation may have been charged',{flag:'wx'});
-  const audio=await synthesize(p.job,key);if(!validWav(audio))throw new Error('Invalid generated audio');
+  const audio=await synthesize(p.job,key);if(!validMp3(audio))throw new Error('Invalid generated audio');
   await fs.writeFile(p.target,audio);await fs.unlink(p.target+'.pending');
   await fs.appendFile('test-output/generation.jsonl',JSON.stringify({kind:p.job.kind,language:p.job.language,maximumCharacters:p.job.prompt.length,bytes:audio.length})+'\n');
   console.log('PASS',p.job.kind,p.job.language,audio.length,'bytes');

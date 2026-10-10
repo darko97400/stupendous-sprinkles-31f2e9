@@ -1,14 +1,16 @@
-const {test}=require('node:test');
+const {test,before}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs/promises');
 const {PGlite}=require('@electric-sql/pglite');
 const {job,keys,REVISION,normalizeName}=require('../voice-service/catalog.cjs');
 const {VoiceStore}=require('../voice-service/store.cjs');
 const {createHandler}=require('../voice-service/handler.cjs');
-const {validWav,processAudio}=require('../voice-service/audio.cjs');
+const {validMp3,processAudio}=require('../voice-service/audio.cjs');
 const body={userId:'123456789',nonce:'test-proof-only',name:'Élodie',language:'fr',kind:'win',revision:REVISION};
 const secret='test-only-not-a-server-secret-12345678';
 function wave(){const b=Buffer.alloc(44+44100);b.write('RIFF');b.writeUInt32LE(b.length-8,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(22050,24);b.writeUInt32LE(44100,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(b.length-44,40);for(let i=44;i<b.length;i+=2)b.writeInt16LE(Math.round(10000*Math.sin(i*.1)),i);return b;}
+let cachedMp3;
+before(async()=>{cachedMp3=await processAudio(wave(),'training');});
 async function fixture(limits={}){
  const db=new PGlite();await db.exec(await fs.readFile('netlify/database/migrations/202610100001_personalized_voices.sql','utf8'));
  // PGlite is a single embedded PostgreSQL connection. Serialize connections;
@@ -18,7 +20,7 @@ async function fixture(limits={}){
  const blobs=new Map();const storage={get:async k=>blobs.get(k)||null,set:async(k,v)=>blobs.set(k,v)};
  const store=new VoiceStore(pool,storage,{total:100,dailyCharacters:10000,monthlyCharacters:10000,userDaily:3,userMonthly:6,...limits});
  let calls=0,verified=0;
- const handler=createHandler({enabled:true,hashSecret:secret,store,authenticate:async(id,nonce)=>{verified++;return nonce==='test-proof-only';},synthesize:async()=>{calls++;return wave();}});
+ const handler=createHandler({enabled:true,hashSecret:secret,store,authenticate:async(id,nonce)=>{verified++;return nonce==='test-proof-only';},synthesize:async()=>{calls++;return cachedMp3;}});
  const send=(overrides={})=>handler({httpMethod:'POST',body:JSON.stringify({...body,...overrides})});
  return {db,store,blobs,send,calls:()=>calls,verified:()=>verified,close:()=>db.close()};
 }
@@ -36,8 +38,15 @@ test('real SQL reservation, repeat playback cache and concurrent duplicate reque
   const responses=await Promise.all(Array.from({length:12},()=>f.send()));
   assert.equal(f.calls(),1);assert(responses.every(r=>[200,409].includes(r.statusCode)));
   const repeat=await f.send();assert.equal(repeat.statusCode,200);assert.equal(f.calls(),1);assert.equal(f.verified(),13);
-  assert(validWav(Buffer.from(repeat.body,'base64')));
+  assert(validMp3(Buffer.from(repeat.body,'base64')));
   assert.equal((await f.db.query('select count(*)::int as n from ps_voice_jobs')).rows[0].n,1);
+  assert.equal(repeat.headers['Content-Type'],'audio/mpeg');
+  for(let session=0;session<5;session++){
+   const relaunched=createHandler({enabled:true,hashSecret:secret,store:f.store,authenticate:async()=>true,synthesize:async()=>{throw new Error('Must reuse persisted audio');}});
+   const reused=await relaunched({httpMethod:'POST',body:JSON.stringify(body)});
+   assert.equal(reused.statusCode,200);assert.equal(reused.body,repeat.body);
+  }
+  assert.equal(f.calls(),1);
  }finally{await f.close();}
 });
 test('user/global quotas and rollback, cache works after quota',async()=>{
@@ -65,9 +74,12 @@ test('activation defaults closed, method and payload limits',async()=>{
  assert.equal((await on({httpMethod:'POST',body:'x'.repeat(4097)})).statusCode,400);
  assert.equal((await on({httpMethod:'POST',body:'{'})).statusCode,400);
 });
-test('actual FFmpeg processing for both voices; invalid/oversized WAV rejected',async()=>{
- assert(validWav(wave()));assert(!validWav(Buffer.alloc(900001)));assert(!validWav(Buffer.from('not audio')));
- for(const kind of ['win','training']){const output=await processAudio(wave(),kind);assert(validWav(output));}
+test('actual FFmpeg processing for both voices; invalid/truncated/oversized MP3 rejected',async()=>{
+ assert(validMp3(cachedMp3));assert(!validMp3(wave()));assert(!validMp3(Buffer.alloc(250001)));assert(!validMp3(Buffer.from('not audio')));
+ assert(!validMp3(cachedMp3.subarray(0,cachedMp3.length-1)));assert(!validMp3(Buffer.concat([cachedMp3,Buffer.from([0])])));
+ const wrongHeader=Buffer.from(cachedMp3);wrongHeader[2]=0x90;assert(!validMp3(wrongHeader));
+ assert(!validMp3(Buffer.concat(Array(21).fill(cachedMp3))));
+ for(const kind of ['win','training']){const output=await processAudio(wave(),kind);assert(validMp3(output));}
 });
 
 test('modern Netlify entry bounds streaming input and fails closed without activation',async()=>{

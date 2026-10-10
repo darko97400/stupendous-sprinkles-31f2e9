@@ -1,4 +1,4 @@
-PROJECT S — PERSONALIZED VOICES — LOCAL IMPLEMENTATION, NOT DEPLOYED
+PROJECT S — PERSONALIZED VOICES — PREVIEW DEPLOYED; PRODUCTION DISABLED
 
 Repository baseline: main 4159a7f487ee15832d2420a880ea94eb3cf571a5.
 No changes to leaderboard, submit-score or reset-leaderboard.
@@ -8,8 +8,8 @@ include that unrelated checkout difference in a commit.
 FUNCTION
 POST /.netlify/functions/personalized-voice
 Body: userId, fresh Meta nonce, name, language (fr/en), kind (win/lose/training),
-revision (ps-voice-20261010-v1). No free text, model, voice or callback URL.
-Response: bounded mono PCM WAV, 22050 Hz, <=20 seconds; private/no-store.
+revision (ps-voice-20261010-v2-mp3). No free text, model, voice or callback URL.
+Response: bounded mono MP3, 44100 Hz / 96 kbps, <=20.1 seconds including encoder padding; private/no-store.
 400 invalid input; 401 proof invalid; 409 reserved/failed generation;
 429 quota; 503 disabled/unavailable. Unity always has an immediate generic fallback.
 There is no GET endpoint exposing personalized files.
@@ -53,8 +53,8 @@ Avoid assuming build-only CONTEXT exists in a Lambda: PS_VOICE_ENV is explicit.
 The build copies only HTML/CSS/JS, _redirects and assets into site-dist. Function
 code, tests and secrets stay outside this public directory. Netlify separately
 packages functions and applies migrations. Verify the isolated preview first.
-Do not create a pull request/deploy until production/preview secret isolation is
-configured: this site automatically deploys main and creates previews for PRs.
+Keep production voice secrets isolated from previews. Draft PR #1 already has a
+Netlify preview; main remains unchanged. Do not enable paid generation in previews.
 
 LOCAL TESTS
 node --test tests/voice.test.cjs
@@ -81,3 +81,12 @@ The owner requested automatic personalization and restoration of Settings. No co
 modal or added settings button remains. Preparation uses verified local Meta identity;
 existing audio mute/volume and immediate generic fallback still apply. Nicknames are
 transmitted to Netlify and ElevenLabs when generation is enabled.
+
+MP3 VALIDATION UPDATE
+Runtime and local/server caches now use MP3 exclusively. Revision v2 distinguishes
+the new format; WAV v1 was never activated in production. Existing six samples were
+transcoded locally, without new paid synthesis, and decoded using AudioType.MPEG.
+Cache keys contain no match, level or mode identifier. Tests reinitialize the handler
+five times against persistent storage and require identical bytes with one synthesis.
+A supplied ElevenLabs Key ID was tested read-only and rejected with
+api_key_id_used_as_api_key; it is not usable as PS_VOICE_ELEVENLABS_KEY.
