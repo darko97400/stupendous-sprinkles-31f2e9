@@ -1,4 +1,4 @@
-PROJECT S — PERSONALIZED VOICES — PREVIEW DEPLOYED; PRODUCTION DISABLED
+PROJECT S â€” PERSONALIZED VOICES â€” PREVIEW DEPLOYED; PRODUCTION DISABLED
 
 Repository baseline: main 4159a7f487ee15832d2420a880ea94eb3cf571a5.
 No changes to leaderboard, submit-score or reset-leaderboard.
@@ -14,11 +14,13 @@ Response: bounded mono MP3, 44100 Hz / 96 kbps, <=20.1 seconds including encoder
 429 quota; 503 disabled/unavailable. Unity always has an immediate generic fallback.
 There is no GET endpoint exposing personalized files.
 
-PRIVATE CONFIGURATION STILL REQUIRED
+PRIVATE CONFIGURATION
 PS_VOICE_ENV=production, production deploy context ONLY.
-PS_VOICE_ENABLED=false initially; enable only after identity/budget tests.
+PS_VOICE_ENABLED=true in production; previews have no activation/secrets.
 PS_VOICE_META_APP_SECRET: existing Meta app 35020187484294368 secret.
-PS_VOICE_ELEVENLABS_KEY: dedicated TTS-only key, hard monthly credit cap 20000.
+PS_VOICE_ELEVENLABS_KEY: supplied TTS key, saved as a secret. A provider-side
+TTS-only restriction/hard cap is recommended; not claimed configured. Server
+reservation limits apply independently.
 PS_VOICE_HASH_SECRET: stable random >=32 bytes, server only; do not rotate on each
 deployment because it names the private cache. Rotation invalidates that cache.
 Netlify Database is provisioned. @netlify/database supplies the correct branch
@@ -42,7 +44,7 @@ Failed/uncertain paid calls retain reservations and are not automatically retrie
 A timeout/crash between saving a blob and marking it ready needs operator review;
 it returns generic audio rather than risk another charge.
 Ledger conservatively counts prompt characters, not a promise of exact provider
-billing. The dedicated ElevenLabs hard cap is additional protection.
+billing. A dedicated ElevenLabs hard cap would provide additional protection.
 Successful cache entries are reused; new name/language/profile revision can require
 new audio. No cache expiration triggers generation on every launch.
 
@@ -53,8 +55,9 @@ Avoid assuming build-only CONTEXT exists in a Lambda: PS_VOICE_ENV is explicit.
 The build copies only HTML/CSS/JS, _redirects and assets into site-dist. Function
 code, tests and secrets stay outside this public directory. Netlify separately
 packages functions and applies migrations. Verify the isolated preview first.
-Keep production voice secrets isolated from previews. Draft PR #1 already has a
-Netlify preview; main remains unchanged. Do not enable paid generation in previews.
+Production voice secrets are isolated from previews. PR #1 has a Netlify preview.
+Do not enable paid generation in previews. Confirm the production deploy status
+before claiming that the endpoint is live.
 
 LOCAL TESTS
 node --test tests/voice.test.cjs
@@ -68,15 +71,16 @@ ignored test-output, not the Unity build. Do not rerun after deleting markers/fi
 
 REMAINING END-TO-END VALIDATION
 Meta app secret has been saved as a production-only Netlify secret. Database
-provisioned; PS_VOICE_ENV=production and PS_VOICE_ENABLED=false in production only.
+provisioned; PS_VOICE_ENV=production and PS_VOICE_ENABLED=true in production only.
 Provider key and stable hash secret are now saved as production-only Netlify secrets.
 The supplied real API key authenticated successfully and generated six new FR/EN
 MP3 samples (286 prompt characters, existing credits, no automatic retries).
 Production activation is tracked separately from credential configuration.
-After secure configuration: validate real Quest nonce once, replay rejection,
+Still requiring device validation: real Quest nonce, replay rejection,
 two independent instances competing for the same key, quota exhaustion, Linux
 FFmpeg packaging/cold start, and both Quest accounts playing separate outcomes.
-Check provider key restrictions/cap and actual billing before enabling publicly.
+Provider key restrictions/cap remain an operational follow-up; application quotas
+are enforced before each paid call. No unlimited retries or credit purchases.
 
 UNITY AUTOMATIC PREPARATION
 The owner requested automatic personalization and restoration of Settings. No consent
