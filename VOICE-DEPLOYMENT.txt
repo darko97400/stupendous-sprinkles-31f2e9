@@ -8,7 +8,7 @@ include that unrelated checkout difference in a commit.
 FUNCTION
 POST /.netlify/functions/personalized-voice
 Body: userId, fresh Meta nonce, name, language (fr/en), kind (win/lose/training),
-revision (ps-voice-20261010-v2-mp3). No free text, model, voice or callback URL.
+revision (ps-voice-20261010-v3-mp3). No free text, model, voice or callback URL.
 Response: bounded mono MP3, 44100 Hz / 96 kbps, <=20.1 seconds including encoder padding; private/no-store.
 400 invalid input; 401 proof invalid; 409 reserved/failed generation;
 429 quota; 503 disabled/unavailable. Unity always has an immediate generic fallback.
@@ -69,8 +69,10 @@ ignored test-output, not the Unity build. Do not rerun after deleting markers/fi
 REMAINING END-TO-END VALIDATION
 Meta app secret has been saved as a production-only Netlify secret. Database
 provisioned; PS_VOICE_ENV=production and PS_VOICE_ENABLED=false in production only.
-Provider key and stable hash secret still need secure configuration. No production
-activation. The browser rejected the local file transfer route; do not bypass it.
+Provider key and stable hash secret are now saved as production-only Netlify secrets.
+The supplied real API key authenticated successfully and generated six new FR/EN
+MP3 samples (286 prompt characters, existing credits, no automatic retries).
+Production activation is tracked separately from credential configuration.
 After secure configuration: validate real Quest nonce once, replay rejection,
 two independent instances competing for the same key, quota exhaustion, Linux
 FFmpeg packaging/cold start, and both Quest accounts playing separate outcomes.
@@ -90,3 +92,17 @@ Cache keys contain no match, level or mode identifier. Tests reinitialize the ha
 five times against persistent storage and require identical bytes with one synthesis.
 A supplied ElevenLabs Key ID was tested read-only and rejected with
 api_key_id_used_as_api_key; it is not usable as PS_VOICE_ELEVENLABS_KEY.
+
+LOUDNESS MATCH (v3)
+Measured all 24 original win/lose MP3 files and five Training completion variants.
+Existing results span -21.01 to -17.03 LUFS. Their median is about -18.7 LUFS.
+Result normalization now targets -18 LUFS (previous personalized target -17),
+true peak ceiling -2 dBTP; Training retains -18 LUFS / -2.5 dBTP.
+Six actual newly generated v3 MP3s measure -19.44 to -18.35 LUFS, true peaks
+-5.19 to -2.29 dBTP. These are sample measurements, not a guarantee for all names.
+No original clips, global mixer volumes or gameplay files were changed for this.
+Unity uses the existing dialogue gain and mute paths for generic/personalized clips;
+Training retains its existing 0.8 multiplier. Final perceived balance needs Quest listening.
+The stable revision and cache keys do not include match/level/session identifiers.
+No new generation on each match. Name/language/profile changes may create new clips.
+The previous unactivated v2 preview is superseded by v3 before production launch.

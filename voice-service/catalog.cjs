@@ -1,6 +1,6 @@
 const crypto = require('node:crypto');
 // Bump whenever templates, voice, model or processing changes; shared with Unity.
-const REVISION = 'ps-voice-20261010-v2-mp3';
+const REVISION = 'ps-voice-20261010-v3-mp3';
 const MODEL = 'eleven_v3';
 const SETTINGS = { stability: 0.5, similarity_boost: 0.75, use_speaker_boost: true };
 function normalizeName(value) {

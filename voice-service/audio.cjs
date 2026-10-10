@@ -32,7 +32,7 @@ async function processAudio(input, kind, ffmpeg=require('ffmpeg-static')) {
     const trim='silenceremove=start_periods=1:start_duration=0.015:start_threshold=-50dB:start_silence=0.04';
     let filter=trim+',areverse,'+trim+',areverse';
     filter+=kind==='training' ? ',atempo=1.06,highpass=f=65,loudnorm=I=-18:TP=-2.5:LRA=7' :
-      ',asetrate=49392,aresample=44100,atempo=0.959821,highpass=f=90,lowpass=f=11000,aeval=val(0)*(0.91+0.09*cos(2*PI*103*t)),loudnorm=I=-17:TP=-2:LRA=7';
+      ',asetrate=49392,aresample=44100,atempo=0.959821,highpass=f=90,lowpass=f=11000,aeval=val(0)*(0.91+0.09*cos(2*PI*103*t)),loudnorm=I=-18:TP=-2:LRA=7';
     await run(ffmpeg,['-v','error','-nostdin','-i',source,'-af',filter,'-t','21','-ac','1','-ar','44100','-c:a','libmp3lame','-b:a','96k','-map_metadata','-1','-id3v2_version','0','-write_id3v1','0','-write_xing','0',target],{timeout:8000,windowsHide:true,maxBuffer:64000});
     const data=await fs.readFile(target); if(!validMp3(data))throw new Error('audio'); return data;
   } finally { await fs.rm(dir,{recursive:true,force:true}); }
