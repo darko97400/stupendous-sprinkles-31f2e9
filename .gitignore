@@ -4,3 +4,4 @@ node_modules/
 !.env.example
 .netlify/
 test-output/
+site-dist/

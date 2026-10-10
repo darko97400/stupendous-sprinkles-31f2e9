@@ -83,3 +83,18 @@ test('modern Netlify entry bounds streaming input and fails closed without activ
   assert.equal((await entry(new Request('https://test.invalid',{method:'POST',body:stream,duplex:'half'}))).status,400);
  } finally {if(prior===undefined)delete process.env.PS_VOICE_ENABLED;else process.env.PS_VOICE_ENABLED=prior;}
 });
+
+test('public site contains unchanged web assets without server code, tests or secrets',async()=>{
+ const os=require('node:os'),path=require('node:path');
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'ps-site-test-'));
+ try {
+  await fs.mkdir(path.join(root,'assets'));
+  for(const name of ['index.html','script.js','styles.css','_redirects','.env','package.json','private.cjs'])await fs.writeFile(path.join(root,name),name);
+  await fs.writeFile(path.join(root,'assets','image.png'),'image');
+  await require('../scripts/prepare-site.cjs').prepare(root);
+  const out=path.join(root,'site-dist');
+  assert.deepEqual((await fs.readdir(out)).sort(),['_redirects','assets','index.html','script.js','styles.css']);
+  assert.equal(await fs.readFile(path.join(out,'index.html'),'utf8'),'index.html');
+  assert.equal(await fs.readFile(path.join(out,'assets','image.png'),'utf8'),'image');
+ }finally{await fs.rm(root,{recursive:true,force:true});}
+});

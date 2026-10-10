@@ -50,8 +50,9 @@ BUILD
 npm ci on Linux installs the Linux ffmpeg-static binary. The function's specific
 Netlify config bundles it and pg. Runtime requires Node 22 (current build setting).
 Avoid assuming build-only CONTEXT exists in a Lambda: PS_VOICE_ENV is explicit.
-.netlifyignore excludes tests and service source from static site publishing;
-function bundling must still be validated on a non-production deploy first.
+The build copies only HTML/CSS/JS, _redirects and assets into site-dist. Function
+code, tests and secrets stay outside this public directory. Netlify separately
+packages functions and applies migrations. Verify the isolated preview first.
 Do not create a pull request/deploy until production/preview secret isolation is
 configured: this site automatically deploys main and creates previews for PRs.
 
