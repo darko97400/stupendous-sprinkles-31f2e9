@@ -1,0 +1,6 @@
+voice-service/**
+tests/**
+test-output/**
+node_modules/**
+.env*
+.git/**

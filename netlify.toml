@@ -4,3 +4,7 @@
 
 [functions]
   node_bundler = "esbuild"
+
+[functions."personalized-voice"]
+  external_node_modules = ["ffmpeg-static", "pg"]
+  included_files = ["node_modules/ffmpeg-static/ffmpeg"]
