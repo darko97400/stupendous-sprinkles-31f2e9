@@ -49,6 +49,14 @@ test('real SQL reservation, repeat playback cache and concurrent duplicate reque
   assert.equal(f.calls(),1);
  }finally{await f.close();}
 });
+
+test('spoken nickname removes number/decorative blocks, preserves names and reuses cached audio',async()=>{
+ const cases=[['ZZZzzz_Pablo_Zzzzzz','Pablo'],['45624_Stephane','Stephane'],['12_Jean-Luc_99','Jean-Luc'],["777_O'Neill","O'Neill"],['Emma_51284','Emma'],['Aaron','Aaron'],['Élodie_１２３','Élodie'],['zzzz-Pablo-ZZZZ','Pablo'],['ZZZZ_51284',null]];
+ for(const [raw,expected] of cases){assert.equal(normalizeName(raw),expected);if(expected)assert.equal(normalizeName(expected),expected);}
+ assert.equal(keys(secret,job({...body,name:'45624_Stephane'})).key,keys(secret,job({...body,name:'Stephane'})).key);
+ assert.equal(job({...body,name:'45624_Stephane'}).prompt,'[excited] Belle victoire, Stephane !');
+ const f=await fixture();try{for(let match=0;match<10;match++){const r=await f.send({name:match%2?'Stephane':'45624_Stephane'});assert.equal(r.statusCode,200);}assert.equal(f.calls(),1);}finally{await f.close();}
+});
 test('user/global quotas and rollback, cache works after quota',async()=>{
  const f=await fixture({userDaily:2});try{
   assert.equal((await f.send()).statusCode,200);assert.equal((await f.send({kind:'lose'})).statusCode,200);

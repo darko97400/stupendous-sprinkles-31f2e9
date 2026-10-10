@@ -5,8 +5,13 @@ const MODEL = 'eleven_v3';
 const SETTINGS = { stability: 0.5, similarity_boost: 0.75, use_speaker_boost: true };
 function normalizeName(value) {
   if (typeof value !== 'string' || value.length > 96) return null;
-  const name = value.normalize('NFC').trim().replace(/\s+/gu, ' ');
-  if (name.length < 2 || name.length > 24 || !/^[\p{L}\p{M}\p{N} '\-]+$/u.test(name) || !/\p{L}/u.test(name)) return null;
+  let name = value.normalize('NFC');
+  if (!/^[\p{L}\p{M}\p{N}\s_'\-]+$/u.test(name)) return null;
+  // Speech only. Keep normal double letters (Emma, Aaron) and real name punctuation.
+  name = name.replace(/[\p{N}_]+/gu, ' ')
+    .replace(/(?<![\p{L}\p{M}])(\p{L})\1{2,}(?![\p{L}\p{M}])/giu, '')
+    .replace(/\s+/gu, ' ').replace(/^[ '\-]+|[ '\-]+$/gu, '');
+  if (name.length < 2 || name.length > 24 || !/\p{L}/u.test(name)) return null;
   return name;
 }
 function job(body) {
