@@ -17,6 +17,12 @@ function createHandler({enabled,authenticate,store,synthesize,hashSecret}) {
       const status=await store.reserve(key,ids.owner,j.prompt.length);
       if(status==='ready') { const data=await store.get(key); return validMp3(data)?audio(data):reply(503); }
       if(status==='quota')return reply(429);
+      if(status==='reserved'||status==='failed') {
+        // A blob may have been saved before an interrupted ledger update. Recover
+        // only validated existing bytes; never retry an uncertain paid synthesis.
+        const data=await store.get(key);
+        if(validMp3(data)){await store.markReady(key);return audio(data);}
+      }
       if(status!=='new')return reply(409);
       reserved=true;
       const data=await synthesize(j);if(!validMp3(data))throw new Error('audio');

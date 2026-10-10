@@ -30,8 +30,9 @@ class VoiceStore {
   async get(key) { const data=await this.blobs.get(key,{type:'arrayBuffer'}); return data ? Buffer.from(data) : null; }
   async save(key, data) {
     await this.blobs.set(key,data);
-    await this.pool.query("UPDATE ps_voice_jobs SET state='ready' WHERE cache_key=$1 AND state='reserved'",[key]);
+    await this.markReady(key);
   }
+  async markReady(key) { await this.pool.query("UPDATE ps_voice_jobs SET state='ready' WHERE cache_key=$1 AND state IN ('reserved','failed')",[key]); }
   async fail(key) { await this.pool.query("UPDATE ps_voice_jobs SET state='failed' WHERE cache_key=$1 AND state='reserved'",[key]); }
 }
 module.exports={VoiceStore};

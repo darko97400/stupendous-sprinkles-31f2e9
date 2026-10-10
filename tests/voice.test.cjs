@@ -76,6 +76,18 @@ test('uncertain provider failure remains reserved/failed across requests, no sec
  assert(!(await h(req)).body.includes('SECRET'));
  }finally{await f.close();}
 });
+
+test('stored MP3 survives a failed ledger update without a second synthesis',async()=>{
+ const f=await fixture();try{
+  f.store.save=async(key,data)=>{await f.store.blobs.set(key,data);throw new Error('simulated database interruption after blob save');};
+  assert.equal((await f.send()).statusCode,503);
+  assert.equal(f.calls(),1);
+  assert.equal((await f.db.query('select state from ps_voice_jobs')).rows[0].state,'failed');
+  const recovered=await f.send();assert.equal(recovered.statusCode,200);assert(validMp3(Buffer.from(recovered.body,'base64')));
+  assert.equal((await f.db.query('select state from ps_voice_jobs')).rows[0].state,'ready');
+  assert.equal((await f.send()).body,recovered.body);assert.equal(f.calls(),1);
+ }finally{await f.close();}
+});
 test('activation defaults closed, method and payload limits',async()=>{
  const h=createHandler({enabled:false});assert.equal((await h({httpMethod:'POST'})).statusCode,503);
  const on=createHandler({enabled:true,hashSecret:secret});assert.equal((await on({httpMethod:'GET'})).statusCode,405);
