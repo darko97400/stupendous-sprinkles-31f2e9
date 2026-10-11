@@ -20,7 +20,8 @@ exports.handler=async event=>{
     stage='blob-configuration';
     const blobs=getStore({name:'project-s-personalized-voices-v1',consistency:'strong',
       ...(env.NETLIFY_BLOBS_SITE_ID&&env.NETLIFY_BLOBS_TOKEN?{siteID:env.NETLIFY_BLOBS_SITE_ID,token:env.NETLIFY_BLOBS_TOKEN}:{})});
-    const store=new VoiceStore(pool,blobs,{total:10000,dailyCharacters:5000,monthlyCharacters:20000,userDaily:6,userMonthly:12});
+    // Five fixed clips per language, with the old outcomes retaining their keys.
+    const store=new VoiceStore(pool,blobs,{total:10000,dailyCharacters:5000,monthlyCharacters:20000,userDaily:10,userMonthly:12});
     handler=createHandler({enabled:true,hashSecret:env.PS_VOICE_HASH_SECRET,store,
       authenticate:async (userId,nonce)=>{
         const response=await fetch('https://graph.oculus.com/user_nonce_validate',{method:'POST',signal:AbortSignal.timeout(6000),

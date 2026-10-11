@@ -57,6 +57,27 @@ test('spoken nickname removes number/decorative blocks, preserves names and reus
  assert.equal(job({...body,name:'45624_Stephane'}).prompt,'[excited] Belle victoire, Stephane !');
  const f=await fixture();try{for(let match=0;match<10;match++){const r=await f.send({name:match%2?'Stephane':'45624_Stephane'});assert.equal(r.statusCode,200);}assert.equal(f.calls(),1);}finally{await f.close();}
 });
+test('battle catalog preserves every previous outcome and adds isolated arcade lines',()=>{
+ const expected={win:['[excited] Belle victoire, Élodie !','[excited] Great victory, Élodie!'],lose:['[encouraging] Tu auras ta revanche, Élodie !',"[encouraging] You'll get them next time, Élodie!"],training:['[excited] Bien joué, Élodie ! Entraînement terminé. À toi de jouer !',"[excited] Well done, Élodie! Training complete. You're ready for action!"]};
+ const all=new Set();
+ for(const language of ['fr','en'])for(const kind of ['win','lose','training','battle_start_v1','battle_support_v1']){
+  const j=job({...body,language,kind});assert(j);all.add(keys(secret,j).key);
+  if(expected[kind])assert.equal(j.prompt,expected[kind][language==='fr'?0:1]);
+  else {assert(j.prompt.startsWith('[excited] '));assert(j.prompt.includes('Élodie'));assert.equal(j.voice,job({...body,kind:'win'}).voice);assert.equal(j.model,'eleven_v3');assert(j.prompt.length<200);}
+ }
+ assert.equal(all.size,10);
+ assert.equal(job({...body,kind:'battle_start_v2'}),null);assert.equal(job({...body,kind:'battle_start_v1',text:'arbitrary text'}),null);
+});
+test('ten FR/EN clips fit the bounded account budget and repeated rounds never resynthesize',async()=>{
+ const f=await fixture({userDaily:10,userMonthly:12});try{
+  const requests=[];for(const language of ['fr','en'])for(const kind of ['win','lose','training','battle_start_v1','battle_support_v1'])requests.push({language,kind});
+  for(const req of requests)assert.equal((await f.send(req)).statusCode,200);
+  assert.equal(f.calls(),10);
+  for(let round=0;round<10;round++)for(const req of requests)assert.equal((await f.send(req)).statusCode,200);
+  assert.equal(f.calls(),10);assert.equal((await f.db.query('select count(*)::int as n from ps_voice_jobs')).rows[0].n,10);
+  assert.equal((await f.send({kind:'battle_start_v1',nonce:'invalid-proof'})).statusCode,401);
+ }finally{await f.close();}
+});
 test('user/global quotas and rollback, cache works after quota',async()=>{
  const f=await fixture({userDaily:2});try{
   assert.equal((await f.send()).statusCode,200);assert.equal((await f.send({kind:'lose'})).statusCode,200);
