@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "epoch": "2026-01-05T00:00:00Z",
+  "weeks": [
+    {
+      "cycle": 0,
+      "heroes": [
+        "hero_bram",
+        "hero_sylve",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-00.png",
+      "sha256": "aba0cd7384232da58c5f81cf75a95f46820a351809aa6e4acdc2fa3a57ca75da"
+    },
+    {
+      "cycle": 1,
+      "heroes": [
+        "hero_durgan",
+        "hero_fenn",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-01.png",
+      "sha256": "1fdfd7e15f1d1850def62b782bb3c1c25196adf42b8550672b7dd6c610aebfea"
+    },
+    {
+      "cycle": 2,
+      "heroes": [
+        "hero_pyros",
+        "hero_pip",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-02.png",
+      "sha256": "c733c80e0c12e87066613228310eab00a44034393949abf960358eb82d1d9b40"
+    },
+    {
+      "cycle": 3,
+      "heroes": [
+        "hero_ursan",
+        "hero_sylve",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-03.png",
+      "sha256": "c3faf85aaf1338afb8a71c973ab5fdd288c171fd0a28880b1f9870b38d779672"
+    },
+    {
+      "cycle": 4,
+      "heroes": [
+        "hero_bram",
+        "hero_fenn",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-04.png",
+      "sha256": "2fbcd495cbc27310725ab341973736f56b0a7a8e8dacac2dda1a0ac012bdc6a4"
+    },
+    {
+      "cycle": 5,
+      "heroes": [
+        "hero_durgan",
+        "hero_pip",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-05.png",
+      "sha256": "add70826fc52a3681c088ec1abc78a081b1a1170b82fe2e88a882cf3c81e7289"
+    },
+    {
+      "cycle": 6,
+      "heroes": [
+        "hero_pyros",
+        "hero_sylve",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-06.png",
+      "sha256": "1cc7ddfdfc56328473503d0c28da5c455b758c02e826a2ae7d8d5beb9b52ee6f"
+    },
+    {
+      "cycle": 7,
+      "heroes": [
+        "hero_ursan",
+        "hero_fenn",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-07.png",
+      "sha256": "e2f32333d9caa9197e31a8910d03c00ad27c4826d72908fa1e16daf029bf7d05"
+    },
+    {
+      "cycle": 8,
+      "heroes": [
+        "hero_bram",
+        "hero_pip",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-08.png",
+      "sha256": "161af3943d6d2c056047d3174bbc2da702506811af878964bd032334a629b160"
+    },
+    {
+      "cycle": 9,
+      "heroes": [
+        "hero_durgan",
+        "hero_sylve",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-09.png",
+      "sha256": "d50ebffd81aca733234a5b8c12c8f638d4c75453440acf73f735c74967417e35"
+    },
+    {
+      "cycle": 10,
+      "heroes": [
+        "hero_pyros",
+        "hero_fenn",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-10.png",
+      "sha256": "6bfd7c2a3576c33fcbe58853aa3c43a5465eb6ac86ff07dc411d3a93a38a8420"
+    },
+    {
+      "cycle": 11,
+      "heroes": [
+        "hero_ursan",
+        "hero_pip",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-11.png",
+      "sha256": "613fb0f48b09a57be88d92addc1e065fde6108f0c6545b7f3bb42f70624efd91"
+    }
+  ]
+}
