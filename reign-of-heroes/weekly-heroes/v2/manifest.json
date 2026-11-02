@@ -1,0 +1,294 @@
+{
+  "version": 2,
+  "epoch": "2026-01-05T00:00:00Z",
+  "weeks": [
+    {
+      "cycle": 0,
+      "lang": "fr",
+      "heroes": [
+        "hero_bram",
+        "hero_sylve",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-00-fr.png",
+      "sha256": "747ca52fdac0b95f0dfef4f5e429b41d01097f9e05329b71ee6e425ede4112ac"
+    },
+    {
+      "cycle": 0,
+      "lang": "en",
+      "heroes": [
+        "hero_bram",
+        "hero_sylve",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-00-en.png",
+      "sha256": "c488070a1d26b0cca72a0ef93d4462ab1271e5e7dc4964491d9ad4b9270db6f5"
+    },
+    {
+      "cycle": 1,
+      "lang": "fr",
+      "heroes": [
+        "hero_durgan",
+        "hero_fenn",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-01-fr.png",
+      "sha256": "ff9bf30ec61b65d3778d273b6bfd3339e6051bf54e1c764e0ca9d3ad918673c8"
+    },
+    {
+      "cycle": 1,
+      "lang": "en",
+      "heroes": [
+        "hero_durgan",
+        "hero_fenn",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-01-en.png",
+      "sha256": "dbc1dacbb93a0ea586649c4a295e298b2a09c8f0490106d403a82430d4cc671a"
+    },
+    {
+      "cycle": 2,
+      "lang": "fr",
+      "heroes": [
+        "hero_pyros",
+        "hero_pip",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-02-fr.png",
+      "sha256": "7f289c4f548043e0bb7b22ad86d40d2fd3c6333a49e037b00ce31c42d034aede"
+    },
+    {
+      "cycle": 2,
+      "lang": "en",
+      "heroes": [
+        "hero_pyros",
+        "hero_pip",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-02-en.png",
+      "sha256": "3f8f62b8d1aebdb89f1f3face261deca77d7c74a5e243e266cabaf3a75ce11db"
+    },
+    {
+      "cycle": 3,
+      "lang": "fr",
+      "heroes": [
+        "hero_ursan",
+        "hero_sylve",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-03-fr.png",
+      "sha256": "8789d1fbd8345ec81191c2efbf391b7ff3488ab1ab952550a1f37a21dbfa4b8e"
+    },
+    {
+      "cycle": 3,
+      "lang": "en",
+      "heroes": [
+        "hero_ursan",
+        "hero_sylve",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-03-en.png",
+      "sha256": "999948d65f657b2297e0d1a7cf7b87e6d5707eae7941f9e24dd7578399852ca5"
+    },
+    {
+      "cycle": 4,
+      "lang": "fr",
+      "heroes": [
+        "hero_bram",
+        "hero_fenn",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-04-fr.png",
+      "sha256": "fb6d7bcf52e80a3651bc305a769807d6c868fab98739aa6f83ff4493f876c345"
+    },
+    {
+      "cycle": 4,
+      "lang": "en",
+      "heroes": [
+        "hero_bram",
+        "hero_fenn",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-04-en.png",
+      "sha256": "4f9621cf497c9f3b23beee76590f0266b1ea844a567cb0124af9f3b24a6debac"
+    },
+    {
+      "cycle": 5,
+      "lang": "fr",
+      "heroes": [
+        "hero_durgan",
+        "hero_pip",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-05-fr.png",
+      "sha256": "16e421208520d757de6c3f4d5900ea464af3144119abc288053d46e639ffe918"
+    },
+    {
+      "cycle": 5,
+      "lang": "en",
+      "heroes": [
+        "hero_durgan",
+        "hero_pip",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-05-en.png",
+      "sha256": "0bda7723fa674771e4cbe79df354f74cd49dc0c5cf0859fe5525bf263eda4ba0"
+    },
+    {
+      "cycle": 6,
+      "lang": "fr",
+      "heroes": [
+        "hero_pyros",
+        "hero_sylve",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-06-fr.png",
+      "sha256": "8aee083fa53b91d28d38c0a51fe77fbf64cd755dd76aff52df2eab6c38b568b0"
+    },
+    {
+      "cycle": 6,
+      "lang": "en",
+      "heroes": [
+        "hero_pyros",
+        "hero_sylve",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-06-en.png",
+      "sha256": "7d94a010118c5bb9c8b4f10df641504d93bd12528e1bd1555b5cd8ae686e7f19"
+    },
+    {
+      "cycle": 7,
+      "lang": "fr",
+      "heroes": [
+        "hero_ursan",
+        "hero_fenn",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-07-fr.png",
+      "sha256": "09d389739b285313a9b41e4f5277abad31f44e300733bdbd81bcef15b2b1aa8b"
+    },
+    {
+      "cycle": 7,
+      "lang": "en",
+      "heroes": [
+        "hero_ursan",
+        "hero_fenn",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-07-en.png",
+      "sha256": "13c887b769ae64ab40135a18c7875347c4502bdbacc5dda8ddcf918d8fb37f08"
+    },
+    {
+      "cycle": 8,
+      "lang": "fr",
+      "heroes": [
+        "hero_bram",
+        "hero_pip",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-08-fr.png",
+      "sha256": "972a9c5c344e6db215811bab23c53f5e4e35617449c8fd3763f9712ad84eb73c"
+    },
+    {
+      "cycle": 8,
+      "lang": "en",
+      "heroes": [
+        "hero_bram",
+        "hero_pip",
+        "hero_nima",
+        "hero_korr"
+      ],
+      "file": "week-08-en.png",
+      "sha256": "573b2757dd45a5455f64e2e4f5564e380f72134918cc682b982f6d6d2c4a0171"
+    },
+    {
+      "cycle": 9,
+      "lang": "fr",
+      "heroes": [
+        "hero_durgan",
+        "hero_sylve",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-09-fr.png",
+      "sha256": "40881f5d4a2d6184441b73813eaf01d9a4270128585737ce7f508dccd12fe394"
+    },
+    {
+      "cycle": 9,
+      "lang": "en",
+      "heroes": [
+        "hero_durgan",
+        "hero_sylve",
+        "hero_eira",
+        "hero_aurel"
+      ],
+      "file": "week-09-en.png",
+      "sha256": "5528ba1e887569f7de7f60eae4c9fd796f3dd403c27c9ae4b58663d5aa8ba201"
+    },
+    {
+      "cycle": 10,
+      "lang": "fr",
+      "heroes": [
+        "hero_pyros",
+        "hero_fenn",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-10-fr.png",
+      "sha256": "2a013431308d05b0b6532011fbcd8d919aae97bd332a141d2d210e54d329fa1c"
+    },
+    {
+      "cycle": 10,
+      "lang": "en",
+      "heroes": [
+        "hero_pyros",
+        "hero_fenn",
+        "hero_lyra",
+        "hero_vex"
+      ],
+      "file": "week-10-en.png",
+      "sha256": "8a2bb5b274217d600ab5ed69a9e54098ec0cb760d4e23914ec28acf893abe00e"
+    },
+    {
+      "cycle": 11,
+      "lang": "fr",
+      "heroes": [
+        "hero_ursan",
+        "hero_pip",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-11-fr.png",
+      "sha256": "e0c1d8f301ff3db5bba380517d2d6078f24dcbe8051710e74874744839828f1b"
+    },
+    {
+      "cycle": 11,
+      "lang": "en",
+      "heroes": [
+        "hero_ursan",
+        "hero_pip",
+        "hero_mora",
+        "hero_neris"
+      ],
+      "file": "week-11-en.png",
+      "sha256": "e26fe7ff12af727bc44ff4a9523b12a7f68cfd0169281971cad73a8ac2110feb"
+    }
+  ]
+}
