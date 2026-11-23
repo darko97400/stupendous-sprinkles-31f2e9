@@ -3,12 +3,12 @@ const {validMp3}=require('./audio.cjs');
 const headers={'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'};
 function reply(statusCode) { return {statusCode,headers,body:''}; }
 function audio(data) {return {statusCode:200,headers:{...headers,'Content-Type':'audio/mpeg'},isBase64Encoded:true,body:data.toString('base64')};}
-function createHandler({enabled,authenticate,store,synthesize,hashSecret}) {
+function createHandler({enabled,authenticate,store,synthesize,hashSecret,idPattern}) {
   return async event => {
     if(event.httpMethod!=='POST')return reply(405);
     if(!enabled || !hashSecret || hashSecret.length<32)return reply(503);
     if(event.isBase64Encoded || typeof event.body!=='string' || Buffer.byteLength(event.body)>4096)return reply(400);
-    let j; try {j=job(JSON.parse(event.body));}catch{return reply(400);}
+    let j; try {j=job(JSON.parse(event.body),idPattern);}catch{return reply(400);}
     if(!j)return reply(400);
     let key, reserved=false;
     try {
