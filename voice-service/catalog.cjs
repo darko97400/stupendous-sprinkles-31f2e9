@@ -15,10 +15,10 @@ function normalizeName(value) {
   if (name.length < 2 || name.length > 24 || !/\p{L}/u.test(name)) return null;
   return name;
 }
-function job(body) {
+function job(body, idPattern = /^[0-9]{3,24}$/) {
   if (!body || typeof body !== 'object' || Object.keys(body).some(k => !['userId','nonce','name','language','kind','revision'].includes(k))) return null;
   const name = normalizeName(body.name);
-  if (!name || typeof body.userId !== 'string' || !/^[0-9]{3,24}$/.test(body.userId) || typeof body.nonce !== 'string' || body.nonce.length < 8 || body.nonce.length > 2048 ||
+  if (!name || typeof body.userId !== 'string' || !idPattern.test(body.userId) || typeof body.nonce !== 'string' || body.nonce.length < 8 || body.nonce.length > 2048 ||
       !['fr','en'].includes(body.language) || !['win','lose','training','battle_start_v1','battle_support_v1'].includes(body.kind) || body.revision !== REVISION) return null;
   const fr = body.language === 'fr';
   const text = body.kind === 'battle_start_v1' ? (fr ? `Allez, ${name} ! Je compte sur toi. J’ai mis les robots en mode courage… le mode ménage, c’est demain !` : `Let's go, ${name}! I'm counting on you. The robots are in brave mode… cleaning mode can wait until tomorrow!`) :
